@@ -17,7 +17,7 @@ ExtendibleHash<K, V>::ExtendibleHash(size_t size) {}
  */
 template <typename K, typename V>
 size_t ExtendibleHash<K, V>::HashKey(const K &key) {
-  return 0;
+  return std::hash<K>{}(key);
 }
 
 /*
@@ -77,4 +77,5 @@ template class ExtendibleHash<Page *, std::list<Page *>::iterator>;
 template class ExtendibleHash<int, std::string>;
 template class ExtendibleHash<int, std::list<int>::iterator>;
 template class ExtendibleHash<int, int>;
+template class ExtendibleHash<std::string, std::string>;
 } // namespace cmudb

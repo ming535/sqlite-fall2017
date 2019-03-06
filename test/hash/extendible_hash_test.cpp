@@ -7,7 +7,23 @@
 #include "hash/extendible_hash.h"
 #include "gtest/gtest.h"
 
+
 namespace cmudb {
+
+TEST(ExtendibleHashTest, HashKey) {
+      ExtendibleHash<int, std::string> *test =
+              new ExtendibleHash<int, std::string>(2);
+
+      std::cout << "hash key of 1 is: " << test->HashKey(1) << std::endl;
+      std::cout << "hash key of 100 is: " << test->HashKey(100) << std::endl;
+
+      ExtendibleHash<std::string, std::string> *test2 =
+              new ExtendibleHash<std::string, std::string>(2);
+
+      std::cout << "hash key of 'hello' is: " << test2->HashKey("hello") << std::endl;
+      std::cout << "hash key of 'world' is: " << test2->HashKey("world") << std::endl;
+}
+
 
 TEST(ExtendibleHashTest, SampleTest) {
   // set leaf size as 2
