@@ -11,6 +11,7 @@
 
 #include <cstdlib>
 #include <vector>
+#include <mutex>
 #include <string>
 
 #include "hash/hash_table.h"
@@ -18,6 +19,9 @@
 namespace cmudb {
 
 template <typename K, typename V>
+
+
+
 class ExtendibleHash : public HashTable<K, V> {
 public:
   // constructor
@@ -33,7 +37,35 @@ public:
   bool Remove(const K &key) override;
   void Insert(const K &key, const V &value) override;
 
+  // SetGlobalDepth is only used for test purpose.
+  void SetGlobalDepth(int depth);
+
 private:
   // add your own member variables here
+
+  int max_n_bit = std::numeric_limits<size_t>::digits;
+  size_t max_n = std::numeric_limits<size_t>::max();
+
+  // bucket_size is the size of each bucket
+  size_t bucket_size;
+
+  int global_depth;
+
+  struct BucketItem {
+      K key;
+      V value;
+  };
+
+  struct Bucket {
+      std::vector<BucketItem> items;
+  };
+
+  typedef std::vector<Bucket> BucketList;
+
+
+  std::vector<BucketList> buckets;
+
+  // a big global lock
+  mutable std::mutex mtx;
 };
 } // namespace cmudb

@@ -11,17 +11,19 @@
 namespace cmudb {
 
 TEST(ExtendibleHashTest, HashKey) {
-      ExtendibleHash<int, std::string> *test =
+    ExtendibleHash<int, std::string> *test =
               new ExtendibleHash<int, std::string>(2);
 
-      std::cout << "hash key of 1 is: " << test->HashKey(1) << std::endl;
-      std::cout << "hash key of 100 is: " << test->HashKey(100) << std::endl;
+    test->SetGlobalDepth(64);
 
-      ExtendibleHash<std::string, std::string> *test2 =
-              new ExtendibleHash<std::string, std::string>(2);
+    ASSERT_EQ(test->HashKey(1), test->HashKey(1));
+    ASSERT_NE(test->HashKey(1), test->HashKey(2));
 
-      std::cout << "hash key of 'hello' is: " << test2->HashKey("hello") << std::endl;
-      std::cout << "hash key of 'world' is: " << test2->HashKey("world") << std::endl;
+
+    ExtendibleHash<std::string, std::string> *test2 =
+            new ExtendibleHash<std::string, std::string>(2);
+      ASSERT_NE(test->HashKey(1), test->HashKey(2));
+      ASSERT_NE(test2->HashKey("hello"), test2->HashKey("hello0"));
 }
 
 
@@ -31,6 +33,7 @@ TEST(ExtendibleHashTest, SampleTest) {
       new ExtendibleHash<int, std::string>(2);
 
   // insert several key/value pairs
+  // 2 ** 4 = 16
   test->Insert(1, "a");
   test->Insert(2, "b");
   test->Insert(3, "c");
